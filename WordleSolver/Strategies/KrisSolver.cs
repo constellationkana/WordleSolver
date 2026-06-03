@@ -24,7 +24,7 @@ public sealed class KrisSolver : IWordleSolverStrategy
     /// <summary>
     /// A set to keep track of guessed words to avoid repeating guesses. This can help improve the efficiency of the solver by ensuring that it doesn't waste turns guessing the same word multiple times, especially as the list of remaining possible words gets smaller.
     /// </summary>
-    private readonly HashSet<string> _guessedWords = new();
+    private readonly List<string> _guessedWords = new();
     /// <summary>
     /// Loads the dictionary from disk, filtering to distinct five-letter lowercase words.
     /// </summary>
@@ -61,7 +61,7 @@ public sealed class KrisSolver : IWordleSolverStrategy
     /// (or <see cref="GuessResult.Default"/> if this is the first turn).
     /// </param>
     /// <returns>A five-letter lowercase word.</returns>
-    
+  
 
     public string PickNextGuess(GuessResult previousResult)
     {
@@ -79,7 +79,7 @@ public sealed class KrisSolver : IWordleSolverStrategy
             // program won't work. Regular Wordle allows users to guess any five-letter
             // word from a much larger dictionary, but we restrict it to the words that
             // can actually be chosen by WordleService to make it easier on you.
-            string firstWord = "abyss"; 
+            string firstWord = "raise"; 
 
             // Filter _remainingWords to remove any words that don't match the first word
             _remainingWords.Remove(firstWord);
@@ -89,7 +89,13 @@ public sealed class KrisSolver : IWordleSolverStrategy
         else
         {
             // TODO: Analyze the previousResult and reduce/filter _remainingWords based on the feedback
+            filterRemainingWords(previousResult);
         }
+
+        private void filterRemainingWords(GuessResult previousResult)
+            {
+       
+            }
 
         // Utilize the remaining words to choose the next guess
         string choice = ChooseBestRemainingWord(previousResult);
