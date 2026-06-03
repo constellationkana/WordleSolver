@@ -7,7 +7,7 @@ namespace WordleSolver.Strategies;
 /// Example solver that simply iterates through a fixed list of words.
 /// Students will replace this with a smarter algorithm.
 /// </summary>
-public sealed class SlowStudentSolver : IWordleSolverStrategy
+public sealed class KrisSolver : IWordleSolverStrategy
 {
 	/// <summary>Absolute or relative path of the word-list file.</summary>
 	private static readonly string WordListPath = Path.Combine("data", "wordle.txt");
@@ -21,6 +21,10 @@ public sealed class SlowStudentSolver : IWordleSolverStrategy
     private List<string> _remainingWords = new();
 
     // TODO: ADD your own private variables that you might need
+    /// <summary>
+    /// A set to keep track of guessed words to avoid repeating guesses. This can help improve the efficiency of the solver by ensuring that it doesn't waste turns guessing the same word multiple times, especially as the list of remaining possible words gets smaller.
+    /// </summary>
+    private readonly HashSet<string> _guessedWords = new();
     /// <summary>
     /// Loads the dictionary from disk, filtering to distinct five-letter lowercase words.
     /// </summary>
@@ -40,8 +44,12 @@ public sealed class SlowStudentSolver : IWordleSolverStrategy
     public void Reset()
     {
         // TODO: What should happen when a new game starts?
-		// If using SLOW student strategy, we just reset the current index
-		// to the first word to start the next guessing sequence
+        ///<summary>
+        ///Reset guessed words and remaining words to start a new game. This ensures that the solver starts fresh for each new game, without any leftover state from previous games that could affect its performance.
+        /// </summary>
+        _guessedWords.Clear();
+        // If using SLOW student strategy, we just reset the current index
+        // to the first word to start the next guessing sequence
         _remainingWords = [..WordList];  // Set _remainingWords to a copy of the full word list
     }
 
@@ -53,6 +61,8 @@ public sealed class SlowStudentSolver : IWordleSolverStrategy
     /// (or <see cref="GuessResult.Default"/> if this is the first turn).
     /// </param>
     /// <returns>A five-letter lowercase word.</returns>
+    
+
     public string PickNextGuess(GuessResult previousResult)
     {
         // Analyze previousResult and remove any words from
